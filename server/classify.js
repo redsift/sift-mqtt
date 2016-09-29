@@ -17,11 +17,17 @@ module.exports = function (got) {
   return inData.data.map(function (datum) {
     let k = i; // datum.key
     let o = JSON.parse(datum.value);
+    let v = parseInt(o.param);
 
-    console.log('sift-mqtt: classify.js: got:', k, o.param);
-    return [
-      { name: 'last', key: 'VALUE', value: o.param },
-      { name: 'category', key: (parseInt(o.param) < 50 ? 'under/' : 'over/') + k, value: o.param }
-    ];
+    if (isNaN(v)) {
+      console.error('sift-mqtt: classify.js:', o.param, 'is not a number');
+      return null;
+    } else {
+      console.log('sift-mqtt: classify.js: ok:', k, v);
+      return [
+        { name: 'last', key: 'VALUE', value: o.param },
+        { name: 'category', key: (v >= 50 ? 'over/' : 'under/') + k, value: o.param }
+      ];
+    }
   });
 };

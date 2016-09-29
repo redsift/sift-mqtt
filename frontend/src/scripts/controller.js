@@ -53,7 +53,7 @@ export default class MyController extends SiftController {
     return this.storage.get({
       bucket: 'count',
       keys: [ 'under', 'over' ]
-    }).then(d => d.map(v => v.value || 0));
+    }).then(d => d.map(v => parseInt(v.value) || 0));
   }
 
 
